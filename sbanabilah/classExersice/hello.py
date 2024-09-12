@@ -3,12 +3,11 @@ from flask import Flask
 import sqlite3
 
 app = Flask(__name__)
-connection = 
 
 @app.route("/")
 @app.route("/hello")
 def hello_world():
-    return "<p>Hello, World!</p>"
+    return "<p>Hello, World! Syreen</p>"
 
 @app.route("/list")
 def get_list():
