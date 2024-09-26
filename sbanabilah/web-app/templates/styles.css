@@ -1,0 +1,45 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+.container {
+    width: 90%;
+    margin: 0 auto;
+}
+header {
+    padding: 20px 0;
+    background-color: #CAE3E6; /* Adding the background color */
+}
+
+.header-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.header-left img {
+    height: 665px;
+    width: 1033px;
+    object-fit: cover;
+}
+
+.header-right img {
+    height: 665px;
+    width: auto;
+    max-width: 100%;
+    object-fit: cover;
+}
+
+section {
+    padding: 20px 0;
+}
+
+.about, .posts {
+    text-align: center;
+}
+
+footer {
+    text-align: center;
+    padding: 10px 0;
+}

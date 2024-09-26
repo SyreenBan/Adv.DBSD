@@ -7,7 +7,8 @@ connection = sqlite3.connect("pets.db",check_same_thread=False)
 @app.route("/")
 @app.route("/hello")
 def get_hello():
-    return "<p>Hello there, World! I am Syreen </p>"
+    return render_template("home.html")
+    #return "<p>Hello there, World! I am Syreen </p>"
 
 @app.route("/list")
 def get_list():
