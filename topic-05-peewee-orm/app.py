@@ -3,6 +3,7 @@ from peewee import *
 
 # Initialize database connection
 db = SqliteDatabase('pets.db')
+db.execute_sql('PRAGMA foreign_keys = ON;')
 
 # Define models
 class Kind(Model):
