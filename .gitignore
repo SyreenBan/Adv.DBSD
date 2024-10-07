@@ -1,6 +1,9 @@
 gdelozie/
 .DS_Store
 
+example.db
+people.csv
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
