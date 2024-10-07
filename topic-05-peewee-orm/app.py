@@ -2,8 +2,7 @@ from flask import Flask, render_template, request, redirect, url_for
 from peewee import *
 
 # Initialize database connection
-db = SqliteDatabase('pets.db')
-db.execute_sql('PRAGMA foreign_keys = ON;')
+db = SqliteDatabase('pets.db', pragmas={'foreign_keys': 1})
 
 # Define models
 class Kind(Model):
