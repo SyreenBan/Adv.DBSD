@@ -1,5 +1,6 @@
 from flask import Flask, render_template, request, redirect, url_for
 import database
+from bson import ObjectId
 
 app = Flask(__name__)
 
@@ -16,16 +17,15 @@ def get_post_create():
 
     if request.method == 'GET':
         kinds = database.retrieve_kinds()
-        # print (kinds)
         return render_template("create.html", kinds=kinds)
     
     if request.method == 'POST':
         data = dict(request.form)
         print(data)
         try:
-            data["age"] = int(data["age"])
+            data["Age"] = int(data["Age"])
         except:
-            data["age"] = 0
+            data["Age"] = 0
         print(data)
 
         pet_list = database.create_pet(data)
@@ -37,16 +37,18 @@ def get_update(id):
     if request.method == 'GET':
 
         kinds = database.retrieve_kinds()
+        print("here is the list of kinds", kinds)
+
         pet = database.retrieve_pet_obj(id) 
 
         if pet is None:
             return "Pet not found", 
-        
-        print(pet)
+        print("Data before Edit ", pet)
         return render_template("update.html", pet=pet, kinds=kinds)
-    
+
     if request.method == 'POST':
-        data = dict(request.form)        
+        data = dict(request.form) 
+        print("Data after Edit ", data)       
         try:
             data["Age"] = int(data["Age"])  # Ensure the field matches the database schema
         except (ValueError, KeyError):
@@ -54,9 +56,8 @@ def get_update(id):
         
         if "Kind_id" in data:
             data["Kind_id"] = ObjectId(data["Kind_id"])
-        # print(data)
+
         database.update_pet(id, data)  # Assuming update_pet is defined to work with MongoDB
-        
         return redirect(url_for('get_list'))  # Redirect to the list of pets after updating
 
 # Delete a pet
@@ -65,7 +66,6 @@ def get_delete(id):
     database.delete_pet(id)
     return redirect(url_for('get_list'))
 
-
 # List of kinds
 @app.route("/kind/list")
 def list_kinds():
@@ -73,3 +73,36 @@ def list_kinds():
     print(kinds)
     return render_template("kind_list.html", kinds=kinds)
 
+# Create a new kind
+@app.route("/kind/create", methods=['GET', 'POST'])
+def create_kind():
+    if request.method == 'POST':
+        data = dict(request.form)
+        database.create_kind(data)
+        return redirect(url_for('list_kinds'))
+    return render_template("kind_create.html")
+
+# Update an existing kind
+@app.route("/kind/update/<id>", methods=['GET', 'POST'])
+def update_kind(id):
+    if request.method == 'POST':
+        data = dict(request.form)
+        database.update_kind(id, data)
+        return redirect(url_for('list_kinds'))
+    
+    kind = database.retrieve_kind(id)
+    if kind is None:
+        return "Kind not found"
+    return render_template("kind_update.html", kind=kind)
+
+# Delete a kind, with integrity error handling
+@app.route("/kind/delete/<id>")
+def delete_kind(id):
+    error_message = database.delete_kind(id)
+    if error_message:
+        kinds = database.retrieve_kinds()
+        return render_template("kind_list.html", kinds=kinds, error_message=error_message)
+    return redirect(url_for('list_kinds'))
+    
+if __name__ == "__main__":
+    app.run(debug=True)

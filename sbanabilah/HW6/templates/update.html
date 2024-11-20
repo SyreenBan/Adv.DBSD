@@ -1,0 +1,27 @@
+<html>
+<head>
+    <title>Update Pet</title>
+</head>
+<body>
+    <h1>Update Pet</h1>
+    
+    <form action="/update/{{ pet['_id'] }}" method="POST">
+        <p>Name: <input name="Name" value="{{ pet['Name'] }}" required /></p>
+        <p>Age: <input name="Age" type="number" min="0" value="{{ pet['Age'] }}" required /></p>
+        <p>Owner: <input name="Owner" value="{{ pet['Owner'] }}" required /></p>
+        <p>
+            Kind: 
+            <select name="Kind_id" required>
+                {% for kind in kinds %}
+                    <option value="{{ kind[0] }}" {% if kind[0] == pet['Kind_id'] %} selected{% endif %}>
+                        {{ kind[1] }}
+                    </option>
+                {% endfor %}
+            </select>
+        </p>
+        <button type="submit">Update</button>
+    </form>
+    <br>
+    <a href="/list">Back to Pet List</a>
+</body>
+</html>
